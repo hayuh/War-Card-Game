@@ -26,12 +26,14 @@ while(1):
                 print("Player 1 wins")
                 break
         player_1_card, player_2_card = player_1.pop(), player_2.pop()
+        winning_pot = [player_1_card, player_2_card]
+        random.shuffle(winning_pot)
         if(deck[player_1_card] > deck[player_2_card]):
-                player_1.extendleft([player_1_card, player_2_card])
+                player_1.extendleft(winning_pot)
                 print("1 battle", player_1)
                 print("2 battle", player_2)
         elif(deck[player_1_card] < deck[player_2_card]):
-                player_2.extendleft([player_1_card, player_2_card])
+                player_2.extendleft(winning_pot)
                 print("1 battle", player_1)
                 print("2 battle", player_2)
         else:
@@ -52,11 +54,13 @@ while(1):
                         player_1_war_card, player_2_war_card = player_1.pop(), player_2.pop()
                         winning_pot.extend([player_1_war_card, player_2_war_card])
                         if(deck[player_1_war_card] > deck[player_2_war_card]):
+                                random.shuffle(winning_pot)
                                 player_1.extendleft(winning_pot)
                                 war_won = True
                                 print("1 war", player_1)
                                 print("2 war", player_2)
                         elif(deck[player_1_war_card] < deck[player_2_war_card]):
+                                random.shuffle(winning_pot)
                                 player_2.extendleft(winning_pot)
                                 war_won = True
                                 print("1 war", player_1)
