@@ -13,11 +13,13 @@
     <button onclick="func('{{queues}}')"> Button</button>
     <div id="game" > 
         Game Div 
-
+        {%for round in rounds%}
         <div>
-            Test
+            {{round}}
+            <p></p>
         </div>
 
+        {%endfor%}
     </div>
     <script>
         function func(queues)

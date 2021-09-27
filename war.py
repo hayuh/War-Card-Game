@@ -2,7 +2,7 @@ import random
 from collections import deque
 
 def play_game():
-        queues = []
+        
         #card deck and corresponding values
         deck = {"C2": 2, "C3": 3, "C4": 4, "C5": 5, "C6": 6, "C7": 7 , "C8": 8, "C9": 9, "C10": 10, "CJ": 11, "CQ": 12, "CK": 13, "CA": 14,
                 "D2": 2, "D3": 3, "D4": 4, "D5": 5, "D6": 6, "D7": 7 , "D8": 8, "D9": 9, "D10": 10, "DJ": 11, "DQ": 12, "DK": 13, "DA": 14,
@@ -19,10 +19,12 @@ def play_game():
 
 
         num_war_deals = 2
-        print("1 start", player_1)
-        print("2 start", player_2)
-        queues.append(player_1)
+        #print("1 start", player_1)
+        #print("2 start", player_2)
+        rounds = []
+        #rounds.append(list(player_1))
         while(1):
+                round = dict()
                 if(len(player_1) == 0):
                         print("Player 2 wins")
                         break
@@ -32,15 +34,25 @@ def play_game():
                 player_1_card, player_2_card = player_1.pop(), player_2.pop()
                 winning_pot = [player_1_card, player_2_card]
                 random.shuffle(winning_pot)
+                #round = {"type": "battle", "player_1_card": player_1_card, "player_2_card": player_2_card, "winning_pot": winning_pot}
                 if(deck[player_1_card] > deck[player_2_card]):
                         player_1.extendleft(winning_pot)
-                        queues.append(player_1)
-                        print("1 battle", player_1)
-                        print("2 battle", player_2)
+                        #rounds.append(list(player_1))
+                        #print("1 battle", player_1)
+                        #print("2 battle", player_2)
+                        round = {"type": "battle", "player_1_card": player_1_card, "player_2_card": player_2_card, "winning_pot": winning_pot,
+                        "player_1_deck": list(player_1), "player_2_deck": list(player_2)}
+                        round.update({"player_1_num_cards": len(round["player_1_deck"]), "player_2_num_cards": len(round["player_2_deck"])})
+                        rounds.append(round)
                 elif(deck[player_1_card] < deck[player_2_card]):
                         player_2.extendleft(winning_pot)
-                        print("1 battle", player_1)
-                        print("2 battle", player_2)
+                        #print("1 battle", player_1)
+                        #print("2 battle", player_2)
+                        round = {"type": "battle", "player_1_card": player_1_card, "player_2_card": player_2_card, "winning_pot": winning_pot,
+                        "player_1_deck": list(player_1), "player_2_deck": list(player_2)}
+                        round.update({"player_1_num_cards": len(round["player_1_deck"]), "player_2_num_cards": len(round["player_2_deck"])})
+                        rounds.append(round)
+
                 else:
                         winning_pot = [player_1_card, player_2_card]
                         war_won = False
@@ -62,20 +74,20 @@ def play_game():
                                         random.shuffle(winning_pot)
                                         player_1.extendleft(winning_pot)
                                         war_won = True
-                                        queues.append(player_1)
-                                        print("1 war", player_1)
-                                        print("2 war", player_2)
+                                        rounds.append(list(player_1))
+                                        #print("1 war", player_1)
+                                        #print("2 war", player_2)
                                 elif(deck[player_1_war_card] < deck[player_2_war_card]):
                                         random.shuffle(winning_pot)
                                         player_2.extendleft(winning_pot)
                                         war_won = True
-                                        queues.append(player_1)
-                                        print("1 war", player_1)
-                                        print("2 war", player_2)
+                                        #queues.append(player_1)
+                                        #print("1 war", player_1)
+                                        #print("2 war", player_2)
                                 else:
                                         continue
-        return queues
-print(play_game())
+        return rounds
+play_game()
 
 
 
