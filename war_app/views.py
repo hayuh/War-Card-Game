@@ -8,5 +8,5 @@ def home_action(request):
 
 def game_action(request):
     context = {}
-    context['rounds'] = war.play_game()
+    context['game_info'] = war.play_game()
     return render(request, 'game.html', context)

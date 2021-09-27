@@ -21,15 +21,17 @@ def play_game():
         num_war_deals = 2
         #print("1 start", player_1)
         #print("2 start", player_2)
+        game_info = {"player_1_start": list(player_1), "player_2_start": list(player_2)}
         rounds = []
+        winner = ""
         #rounds.append(list(player_1))
         while(1):
                 round = dict()
                 if(len(player_1) == 0):
-                        print("Player 2 wins")
+                        winner = "Player 2"
                         break
                 if(len(player_2) == 0):
-                        print("Player 1 wins")
+                        winner = "Player 1"
                         break
                 player_1_card, player_2_card = player_1.pop(), player_2.pop()
                 winning_pot = [player_1_card, player_2_card]
@@ -57,14 +59,11 @@ def play_game():
                         winning_pot = [player_1_card, player_2_card]
                         war_won = False
                         while(war_won == False):
-                                if(len(player_1) < num_war_deals and len(player_2) < num_war_deals):
-                                        print("Draw")
-                                        break
                                 if(len(player_1) < num_war_deals):
-                                        print("Player 2 wins")
+                                        winner = "Player 2"
                                         break
                                 if(len(player_2) < num_war_deals):
-                                        print("Player 1 wins")
+                                        winner = "Player 1"
                                         break
                                 for i in range(0, num_war_deals-1):
                                         winning_pot.extend([player_1.pop(), player_2.pop()])
@@ -74,9 +73,13 @@ def play_game():
                                         random.shuffle(winning_pot)
                                         player_1.extendleft(winning_pot)
                                         war_won = True
-                                        rounds.append(list(player_1))
+                                        #rounds.append(list(player_1))
                                         #print("1 war", player_1)
                                         #print("2 war", player_2)
+                                        round = {"type": "war", "player_1_card": player_1_war_card, "player_2_card": player_2_war_card, "winning_pot": winning_pot,
+                                        "player_1_deck": list(player_1), "player_2_deck": list(player_2)}
+                                        round.update({"player_1_num_cards": len(round["player_1_deck"]), "player_2_num_cards": len(round["player_2_deck"])})
+                                        rounds.append(round)
                                 elif(deck[player_1_war_card] < deck[player_2_war_card]):
                                         random.shuffle(winning_pot)
                                         player_2.extendleft(winning_pot)
@@ -84,9 +87,14 @@ def play_game():
                                         #queues.append(player_1)
                                         #print("1 war", player_1)
                                         #print("2 war", player_2)
+                                        round = {"type": "war", "player_1_card": player_1_war_card, "player_2_card": player_2_war_card, "winning_pot": winning_pot,
+                                        "player_1_deck": list(player_1), "player_2_deck": list(player_2)}
+                                        round.update({"player_1_num_cards": len(round["player_1_deck"]), "player_2_num_cards": len(round["player_2_deck"])})
+                                        rounds.append(round)
                                 else:
                                         continue
-        return rounds
+        game_info.update({"rounds": rounds, "winner": winner})
+        return game_info
 play_game()
 
 

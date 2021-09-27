@@ -10,22 +10,26 @@
 </head>
 <body>
     <!--<button onclick="getElementById('game').style.display = 'block'; this.style.display = 'none'"> Start Game </button> -->
-    <button onclick="func('{{queues}}')"> Button</button>
+
     <div id="game" > 
-        Game Div 
-        {%for round in rounds%}
+        <div>
+            {{game_info.player_1_start}}
+            <br>
+            {{game_info.player_2_start}}
+        </div>
+        {%for round in game_info.rounds%}
         <div>
             {{round}}
             <p></p>
+        </div>
+        <div>
+            {{game_info.winner}}
         </div>
 
         {%endfor%}
     </div>
     <script>
-        function func(queues)
-        {
-            console.log(queues);
-        }
+
     </script>
 
 </body>
