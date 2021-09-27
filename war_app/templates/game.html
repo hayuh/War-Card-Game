@@ -10,7 +10,9 @@
 </head>
 <body>
     <!--<button onclick="getElementById('game').style.display = 'block'; this.style.display = 'none'"> Start Game </button> -->
-
+    <div >
+        <a href="{% url 'lifetime-wins' %}" >Lifetime Wins</a>
+    </div>
     <div id="game" > 
         <div>
             {{game_info.player_1_start}}

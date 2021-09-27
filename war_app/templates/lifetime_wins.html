@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+</head>
+<body>
+    <div >
+        {%if num_players == 0%}
+        <div>
+            No lifetime wins to report
+        </div>
+        {%else%}
+        Player 1 has {{player_1}} wins.
+        <br>
+        Player 2 has {{player_2}} wins.
+        {%endif%}
+    </div>
+    <div >
+        <a href="{% url 'delete-wins' %}" >Delete Lifetime Wins</a>
+    </div>
+   
+
+
+</body>
+</html>

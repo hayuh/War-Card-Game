@@ -26,3 +26,22 @@ def game_action(request):
         player_2.games_won += 1
         player_2.save()
     return render(request, 'game.html', context)
+
+def lifetime_wins_action(request):
+    context = {"num_players": 0}
+    players = Player.objects.all()
+    if(len(players) != 0):
+        for player in players:
+            context["num_players"] += 1
+            context.update({player.username: player.games_won})
+
+    print(context)
+
+    return render(request, 'lifetime_wins.html', context)
+
+def delete_wins_action(request):
+    context = {"num_players": 0}
+    print('TESt')
+    Player.objects.all().delete()
+
+    return render(request, 'lifetime_wins.html', context)

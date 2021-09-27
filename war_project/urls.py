@@ -19,5 +19,7 @@ from war_app import views
 
 urlpatterns = [
     path('', views.home_action, name='home'),
-    path('game', views.game_action, name='game')
+    path('game', views.game_action, name='game'),
+    path('lifetime-wins', views.lifetime_wins_action, name='lifetime-wins'),
+    path('delete-wins', views.delete_wins_action, name='delete-wins')
 ]
