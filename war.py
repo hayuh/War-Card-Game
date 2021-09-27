@@ -92,7 +92,7 @@ def play_game(player_1, player_2, num_war_deals):
         return game_info
 
 
-cards = list(deck.keys())
+
 def test_battle_win():
 #Test if battle wins are correct. Player 2 should win.
 
@@ -176,8 +176,11 @@ def test_war_win_two():
         assert (len(updated_player_2_deck) - len(updated_player_1_deck)) == 10
         assert all(x in list(updated_player_2_deck) for x in ["H2", "H5", "CA", "DA", "C3", "H3", "H9", "HA", "HJ", "D3"])
 
-
-
+if __name__ == "__main__":
+        cards = list(deck.keys())
+        test_battle_win()
+        test_war_win_one()
+        test_war_win_two()
 
 
 
