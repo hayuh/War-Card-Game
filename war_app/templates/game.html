@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <style>
+        .hidden-div {
+            display:none
+        }
+    </style>
+</head>
+<body>
+    <!--<button onclick="getElementById('game').style.display = 'block'; this.style.display = 'none'"> Start Game </button> -->
+    <button onclick="func('{{queues}}')"> Button</button>
+    <div id="game" > 
+        Game Div 
+
+        <div>
+            Test
+        </div>
+
+    </div>
+    <script>
+        function func(queues)
+        {
+            console.log(queues);
+        }
+    </script>
+
+</body>
+</html>

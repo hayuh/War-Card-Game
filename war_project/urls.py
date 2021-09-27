@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from war_app import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('', views.home_action, name='home'),
+    path('game', views.game_action, name='game')
 ]
