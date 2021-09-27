@@ -18,7 +18,9 @@ def game_action(request):
     player_1 = Player.objects.filter(username="player_1")[0]
     player_2 = Player.objects.filter(username="player_2")[0]
     context = {}
-    context['game_info'] = war.play_game()
+    player_1_deck, player_2_deck = war.deal_cards()
+    num_war_deals = 2
+    context['game_info'] = war.play_game(player_1_deck, player_2_deck, num_war_deals)
     if(context['game_info']['winner'] == "Player 1"):
         player_1.games_won += 1
         player_1.save()
