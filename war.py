@@ -49,6 +49,10 @@ def play_game(player_1, player_2, num_war_deals):
                         rounds.append(round)
 
                 else:
+                        round = {"type": "battle", "player_1_card": player_1_card, "player_2_card": player_2_card, "winning_pot": winning_pot,
+                        "player_1_deck": list(player_1), "player_2_deck": list(player_2)}
+                        round.update({"player_1_num_cards": len(round["player_1_deck"]), "player_2_num_cards": len(round["player_2_deck"])})
+                        rounds.append(round)
                         winning_pot = [player_1_card, player_2_card]
                         war_won = False
                         while(war_won == False):
@@ -79,6 +83,10 @@ def play_game(player_1, player_2, num_war_deals):
                                         round.update({"player_1_num_cards": len(round["player_1_deck"]), "player_2_num_cards": len(round["player_2_deck"])})
                                         rounds.append(round)
                                 else:
+                                        round = {"type": "war", "player_1_card": player_1_war_card, "player_2_card": player_2_war_card, "winning_pot": winning_pot,
+                                        "player_1_deck": list(player_1), "player_2_deck": list(player_2)}
+                                        round.update({"player_1_num_cards": len(round["player_1_deck"]), "player_2_num_cards": len(round["player_2_deck"])})
+                                        rounds.append(round)
                                         continue
         game_info.update({"rounds": rounds, "winner": winner})
         return game_info
@@ -86,7 +94,7 @@ def play_game(player_1, player_2, num_war_deals):
 
 cards = list(deck.keys())
 def test_battle_win():
-        #battle win works correctly, player_2 wins battle
+#Test if battle wins are correct. Player 2 should win.
 
         #make player_1 deck
         player_1 = deque(["C2"])
@@ -107,14 +115,66 @@ def test_battle_win():
         #check player_2 wins
         assert len(player_1) == len(player_2)
         game_info = play_game(player_1, player_2, 2)
-        assert len(game_info["rounds"][0]["player_2_deck"]) > len(game_info["rounds"][0]["player_1_deck"])
-        assert "C2" in list(game_info["rounds"][0]["player_2_deck"]) and "C3" in list(game_info["rounds"][0]["player_2_deck"])
+        updated_player_1_deck, updated_player_2_deck = game_info["rounds"][0]["player_1_deck"], game_info["rounds"][0]["player_2_deck"]
+        assert len(updated_player_2_deck) > len(updated_player_1_deck)
+        assert len(updated_player_2_deck) - len(updated_player_1_deck) == 2
+        assert "C2" in list(updated_player_2_deck) and "C3" in list(updated_player_2_deck)
 
+def test_war_win_one():
+#Test if war wins are correct after 1 round of war. Player 2 should win.
 
+        #make player_1 deck
+        player_1 = deque(["C2", "DA", "C3"])
+        player_2 = deque(["D4", "HJ", "D3"])
+        possible_choices = [x for x in cards if x not in list(player_1) and x not in list(player_2)]
+        p1_selections = random.sample(possible_choices, 23)
+        assert all(x not in p1_selections for x in ["C2", "C3", "D3", "D4", "DA", "HJ"])
+        assert len(set(p1_selections)) == len(p1_selections) 
+        player_1.extendleft(p1_selections)
 
+        #make player_2 deck
+        p2_selections = [x for x in cards if x not in list(player_1) and x not in ["C2", "C3", "D3", "D4", "DA", "HJ"]]
+        random.shuffle(p2_selections)
+        assert all(x not in p2_selections for x in ["C2", "C3", "D3", "D4", "DA", "HJ"])
+        assert len(set(p2_selections)) == len(p2_selections) 
+        player_2.extendleft(p2_selections)
 
+        #check player_2 wins
+        assert len(player_1) == len(player_2)
+        game_info = play_game(player_1, player_2, 2)
+        updated_player_1_deck, updated_player_2_deck = game_info["rounds"][1]["player_1_deck"], game_info["rounds"][1]["player_2_deck"]
+        print(updated_player_2_deck, updated_player_1_deck)
+        assert len(updated_player_2_deck) > len(updated_player_1_deck)
+        assert (len(updated_player_2_deck) - len(updated_player_1_deck)) == 6
+        assert all(x in list(updated_player_2_deck) for x in ["C2", "C3", "D3", "D4", "DA", "HJ"])
 
+def test_war_win_two():
+#Test if war wins are correct after 2 rounds of war. Player 2 should win.
 
+        #make player_1 deck
+        player_1 = deque(["H2", "H5", "CA", "DA", "C3"])
+        player_2 = deque(["H3", "H9", "HA", "HJ", "D3"])
+        possible_choices = [x for x in cards if x not in list(player_1) and x not in list(player_2)]
+        p1_selections = random.sample(possible_choices, 21)
+        assert all(x not in p1_selections for x in ["H2", "H5", "CA", "DA", "C3", "H3", "H9", "HA", "HJ", "D3"])
+        assert len(set(p1_selections)) == len(p1_selections) 
+        player_1.extendleft(p1_selections)
+
+        #make player_2 deck
+        p2_selections = [x for x in cards if x not in list(player_1) and x not in ["H2", "H5", "CA", "DA", "C3", "H3", "H9", "HA", "HJ", "D3"]]
+        random.shuffle(p2_selections)
+        assert all(x not in p2_selections for x in ["H2", "H5", "CA", "DA", "C3", "H3", "H9", "HA", "HJ", "D3"])
+        assert len(set(p2_selections)) == len(p2_selections) 
+        player_2.extendleft(p2_selections)
+
+        #check player_2 wins
+        assert len(player_1) == len(player_2)
+        game_info = play_game(player_1, player_2, 2)
+        updated_player_1_deck, updated_player_2_deck = game_info["rounds"][2]["player_1_deck"], game_info["rounds"][2]["player_2_deck"]
+        print(updated_player_2_deck, updated_player_1_deck)
+        assert len(updated_player_2_deck) > len(updated_player_1_deck)
+        assert (len(updated_player_2_deck) - len(updated_player_1_deck)) == 10
+        assert all(x in list(updated_player_2_deck) for x in ["H2", "H5", "CA", "DA", "C3", "H3", "H9", "HA", "HJ", "D3"])
 
 
 
