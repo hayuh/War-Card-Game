@@ -7,24 +7,27 @@ deck = {"C2": 2, "C3": 3, "C4": 4, "C5": 5, "C6": 6, "C7": 7 , "C8": 8, "C9": 9,
         "H2": 2, "H3": 3, "H4": 4, "H5": 5, "H6": 6, "H7": 7 , "H8": 8, "H9": 9, "H10": 10, "HJ": 11, "HQ": 12, "HK": 13, "HA": 14,
         "S2": 2, "S3": 3, "S4": 4, "S5": 5, "S6": 6, "S7": 7 , "S8": 8, "S9": 9, "S10": 10, "SJ": 11, "SQ": 12, "SK": 13, "SA": 14}
 
+#Returns player_1 and player_2's card decks at start of game.
 def deal_cards():
         cards = list(deck.keys())
-
         random.shuffle(cards)
-
         half = len(deck)//2
         player_1 = deque(cards[0:half])
         player_2 = deque(cards[half:])
         return player_1, player_2
 
+#Plays the war game.
+#Inputs:
+#       player_1: queue object representing player_1's deck
+#       player_2: queue object representing player_2's deck
+#       num_war_deals: int representing how many cards each player deals out in the event of a war
 def play_game(player_1, player_2, num_war_deals):
-
         game_info = {"player_1_start": list(player_1), "player_2_start": list(player_2)}
         rounds = []
         winner = ""
-
         while(1):
-                round = dict()
+                round = dict() #Stores game information for each round
+                #Player loses when their number of cards is 0
                 if(len(player_1) == 0):
                         winner = "Player 2"
                         break
@@ -33,22 +36,21 @@ def play_game(player_1, player_2, num_war_deals):
                         break
                 player_1_card, player_2_card = player_1.pop(), player_2.pop()
                 winning_pot = [player_1_card, player_2_card]
-                random.shuffle(winning_pot)
-                
-                if(deck[player_1_card] > deck[player_2_card]):
+                random.shuffle(winning_pot) #winning_pot is always randomized to prevent infinite cycles of games
+                if(deck[player_1_card] > deck[player_2_card]): #Player 1 wins the battle
                         player_1.extendleft(winning_pot)
                         round = {"type": "battle", "player_1_card": player_1_card, "player_2_card": player_2_card, "winning_pot": winning_pot,
                         "player_1_deck": list(player_1), "player_2_deck": list(player_2)}
                         round.update({"player_1_num_cards": len(round["player_1_deck"]), "player_2_num_cards": len(round["player_2_deck"])})
                         rounds.append(round)
-                elif(deck[player_1_card] < deck[player_2_card]):
+                elif(deck[player_1_card] < deck[player_2_card]): #Player 2 wins the battle
                         player_2.extendleft(winning_pot)
                         round = {"type": "battle", "player_1_card": player_1_card, "player_2_card": player_2_card, "winning_pot": winning_pot,
                         "player_1_deck": list(player_1), "player_2_deck": list(player_2)}
                         round.update({"player_1_num_cards": len(round["player_1_deck"]), "player_2_num_cards": len(round["player_2_deck"])})
                         rounds.append(round)
 
-                else:
+                else: #War
                         round = {"type": "battle", "player_1_card": player_1_card, "player_2_card": player_2_card, "winning_pot": winning_pot,
                         "player_1_deck": list(player_1), "player_2_deck": list(player_2)}
                         round.update({"player_1_num_cards": len(round["player_1_deck"]), "player_2_num_cards": len(round["player_2_deck"])})
@@ -56,17 +58,18 @@ def play_game(player_1, player_2, num_war_deals):
                         winning_pot = [player_1_card, player_2_card]
                         war_won = False
                         while(war_won == False):
+                                #If either players cannot deal out enough cards in war, they automatically lose.
                                 if(len(player_1) < num_war_deals):
                                         winner = "Player 2"
                                         break
                                 if(len(player_2) < num_war_deals):
                                         winner = "Player 1"
                                         break
-                                for i in range(0, num_war_deals-1):
+                                for i in range(0, num_war_deals-1): #putting out face down cards
                                         winning_pot.extend([player_1.pop(), player_2.pop()])
                                 player_1_war_card, player_2_war_card = player_1.pop(), player_2.pop()
                                 winning_pot.extend([player_1_war_card, player_2_war_card])
-                                if(deck[player_1_war_card] > deck[player_2_war_card]):
+                                if(deck[player_1_war_card] > deck[player_2_war_card]): #Player 1 wins war
                                         random.shuffle(winning_pot)
                                         player_1.extendleft(winning_pot)
                                         war_won = True
@@ -74,7 +77,7 @@ def play_game(player_1, player_2, num_war_deals):
                                         "player_1_deck": list(player_1), "player_2_deck": list(player_2)}
                                         round.update({"player_1_num_cards": len(round["player_1_deck"]), "player_2_num_cards": len(round["player_2_deck"])})
                                         rounds.append(round)
-                                elif(deck[player_1_war_card] < deck[player_2_war_card]):
+                                elif(deck[player_1_war_card] < deck[player_2_war_card]): #Player 2 wins war
                                         random.shuffle(winning_pot)
                                         player_2.extendleft(winning_pot)
                                         war_won = True
