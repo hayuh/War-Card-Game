@@ -3,8 +3,14 @@
 <head>
 	<meta charset="utf-8">
     <style>
-        .hidden-div {
-            display:none
+        .button{
+            border-radius: 8px;
+            background-color: lightgreen;
+            width: 30px;
+            height: 30px;
+            font-size: 15px;
+            text-align: center;
+            
         }
     </style>
 </head>
@@ -18,18 +24,47 @@
     </div>
     <div id="game" > 
         <div>
-            {{game_info.player_1_start}}
+            Starting Decks
             <br>
-            {{game_info.player_2_start}}
+            Player 1: {{game_info.player_1_start}}
+            <br>
+            Player 2: {{game_info.player_2_start}}
+            <p></p>
         </div>
         {%for round in game_info.rounds%}
         <div>
-            {{round}}
+            <div>
+                Type: {{round.type}}
+                <br>
+            </div>
+            <div>
+                Player 1 Card: {{round.player_1_card}}
+                <br>
+            </div>
+            <div>
+                Player 2 Card: {{round.player_2_card}}
+                <br>
+            </div>
+            <div>
+                Winning Pot: {{round.winning_pot}}
+            </div>
+            <div>
+                Player 1 Deck: {{round.player_1_deck}}
+            </div>
+            <div>
+                Player 1 Number of Cards: {{round.player_1_num_cards}}
+            </div>
+            <div>
+                Player 2 Deck: {{round.player_2_deck}}
+            </div>
+            <div>
+                Player 2 Number of Cards: {{round.player_2_num_cards}}
+            </div>
             <p></p>
         </div>
         {%endfor%}
         <div>
-            {{game_info.winner}}
+            {{game_info.winner}} wins!
         </div>
     </div>
     <script>

@@ -21,6 +21,7 @@ def game_action(request):
     player_1_deck, player_2_deck = war.deal_cards()
     num_war_deals = 2
     context['game_info'] = war.play_game(player_1_deck, player_2_deck, num_war_deals)
+    context['n'] = range(26)
     if(context['game_info']['winner'] == "Player 1"):
         player_1.games_won += 1
         player_1.save()
